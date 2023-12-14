@@ -9,8 +9,10 @@
   "author": "Andrew Bloese (andrewbloese-00)",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.6.2",
     "dotenv": "^16.3.1",
     "ffmpeg": "^0.0.4",
+    "node-id3": "^0.2.6",
     "openai": "^4.20.1",
     "puppeteer": "^21.6.0",
     "ytdl-core": "^4.11.5"

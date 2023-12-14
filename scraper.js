@@ -1,8 +1,6 @@
 const puppeteer = require("puppeteer");
 
 const ytdl = require("ytdl-core");
-
-const LINK_OFFSET = 3;
 const PUPPETEER_OPTS = { headless: "new"}
 
 /**
@@ -16,16 +14,18 @@ const SCRAPER_INIT_ERR = ( err ) => {
     console.error(err);
     return { error: msg , reason: err};
 } 
-
-
+/**
+ * 
+ * @param {unknown} err 
+ * @param {string|undefined} url
+ * @returns {{error: string, reason: unknown}}
+ */
 const SCRAPE_ERROR = ( err, url=undefined ) => {
     const msg = url ? "Failed to scrape the page." : `Failed to scrape the page at ${url}`
     console.warn(msg);
     console.error(err);
     return { error: msg, reason: err } 
 }
-
-
 
 
 
@@ -76,10 +76,6 @@ async function initScraper(){
 
 
 } 
-
-
-
-
 /**
  * @about a callback that scrapes the link and title of all the videos in a youtube playlist given a link to the playlist; 
  * @returns {{title:string,href:string}[]} an array of the videos found on the youtube playlist page
@@ -101,10 +97,10 @@ function scrapeVidsFromPlaylist(){
 
 
 //testing the usage of scrapeVids function 
-async function main(){
+async function getPlaylistInfo(playlistUrl){
     const scraper = await initScraper();
     if(scraper.error) return ;
-    const results = await scraper.scrape("https://www.youtube.com/playlist?list=PLHGgDEW_R5sE-89rRZs7jKv5XZS-h4BAV", scrapeVidsFromPlaylist)
+    const results = await scraper.scrape(playlistUrl, scrapeVidsFromPlaylist)
     await scraper.close()
 
     let q = [] 
@@ -113,12 +109,17 @@ async function main(){
     }
     const resolved = await Promise.all(q)
     for(let i = 0; i < results.length; i++){
-        results[i]['author'] = resolved[i].videoDetails.author.name;
-        results[i]['thumbnail'] = resolved[i].videoDetails.thumbnails[0].url
-        results[i]['durationMS'] = resolved[i].videoDetails.lengthSeconds*1000
+        results[i]['album'] = `Youtube Downloaded ${new Date().toDateString()}`
+        results[i]['artist'] = resolved[i].videoDetails.author.name;
+        results[i]['APIC'] = resolved[i].videoDetails.thumbnails[0].url
+        // results[i]['durationMS'] = resolved[i].videoDetails.lengthSeconds*1000
+        results[i]['TRCK'] = i+1
     }
-    console.log(results)
-    process.exit(0);
-
+    return results
 }
-main();
+
+
+
+// const PL = "https://www.youtube.com/playlist?list=PLHGgDEW_R5sE-89rRZs7jKv5XZS-h4BAV"
+
+module.exports = { getPlaylistInfo }
