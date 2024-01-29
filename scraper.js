@@ -1,5 +1,4 @@
 const puppeteer = require("puppeteer");
-
 const ytdl = require("ytdl-core");
 const PUPPETEER_OPTS = { headless: "new"}
 
@@ -99,7 +98,7 @@ function scrapeVidsFromPlaylist(){
 //testing the usage of scrapeVids function 
 async function getPlaylistInfo(playlistUrl){
     const scraper = await initScraper();
-    if(scraper.error) return ;
+    if(scraper.error) return scraper.error ;
     const results = await scraper.scrape(playlistUrl, scrapeVidsFromPlaylist)
     await scraper.close()
 
