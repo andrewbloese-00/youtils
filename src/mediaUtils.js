@@ -1,10 +1,8 @@
 const ytdl = require("ytdl-core")
 const ffmpeg = require("ffmpeg")
 
-const { createWriteStream , unlink, readFile, read, createReadStream }  = require("fs")
 
-
-
+const { createWriteStream , createReadStream , readFile,unlink} = require("fs")
 
 const DL_PATH = `${__dirname}/tmp`
 
@@ -23,7 +21,7 @@ const downloadVideo = url => new Promise((resolve) =>{
     const destination = createWriteStream(destinationPath);
 
     //filter for mp4 formats with audio
-    const filter = fmt => fmt.hasAudio && fmt.container == "mp4";
+    const filter = fmt => fmt.hasAudio && fmt.hasVideo && fmt.container == "mp4";
     ytdl(url,{filter})
         .pipe(destination)
             .on("finish", ()=>{

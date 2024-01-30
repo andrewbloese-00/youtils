@@ -3,8 +3,6 @@ const { test_mp4 } = require("./test-mp4")
 const { test_transcribe } = require("./test-transcript")
 
 const API_KEY = "<enter your openai api key here>"
-
-
 async function test(){
     console.log("Running Tests...")
     console.time("tests")
