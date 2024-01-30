@@ -1,2 +1,2 @@
-const {Youtils} = require("./Youtils")
+const {Youtils} = require("./src/Youtils")
 module.exports = Youtils

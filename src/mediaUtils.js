@@ -1,7 +1,7 @@
 const ytdl = require("ytdl-core")
 const ffmpeg = require("ffmpeg")
 
-const { createWriteStream , unlink, readFile }  = require("fs")
+const { createWriteStream , unlink, readFile, read, createReadStream }  = require("fs")
 
 
 
@@ -103,13 +103,14 @@ const getFileBuffer = (pathToFile)=> new Promise((resolve)=>{
         resolve(data) //return the buffer
     })
 })  
+const getFileStream = pathToFile => createReadStream(pathToFile)
 
 
 
 
 
 module.exports = { 
-    downloadAndConvertToMp3, downloadVideo, convertToMp3,getFileBuffer
+    downloadAndConvertToMp3, downloadVideo, convertToMp3,getFileBuffer, getFileStream
 }
 
 
