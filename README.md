@@ -25,9 +25,9 @@ const {path,error} = await Youtils.getAudio("<some-youtube-url>");
 const OPENAI_KEY = "<enter-your-api-key>"
 const { transcripton , error } = await Youtils.getTranscription("<some-youtube-url>", OPENAI_KEY);
 console.log("transcription: ", transcription); 
-
-
 ```
+* NOTE: Currently will throw an error if the video is longer than the whisper-1 max size, the program will error
+    * Goal to enable automatic audio chunking to prevent errors.
 
 
 ## Coming Soon ✨✨
