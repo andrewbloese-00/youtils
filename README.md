@@ -1,10 +1,10 @@
 # Youtils
-Download videos, playlists and audio with urls, all in NodeJS. Also , use your OpenAI API Key to enable the Youtils transcriptions API. 
+Download videos, playlists and audio with urls, all in NodeJS. Also , use your OpenAI API Key to enable the Youtils transcriptions API.
 
 
 ## Usage
 ### Install and Include
-Download the youtils repository into your project, then to access it simply import the Youtils Utility Class to interface with the API. 
+Download the youtils repository into your project, then to access it simply import the Youtils Utility Class to interface with the API.
 
 ```javascript
 const Youtils = require("youtils") // require("youtils/index.js");
@@ -15,27 +15,23 @@ const Youtils = require("youtils") // require("youtils/index.js");
 const { path , error } = await Youtils.getVideo("<some-youtube-url>");
 ```
 
-### Download Audio 
+### Download Audio
 ```javascript
 const {path,error} = await Youtils.getAudio("<some-youtube-url>");
 ```
 
-### Transcribe A Video 
+### Transcribe A Video
 ```javascript
-const OPENAI_KEY = "<enter-your-api-key>"
-const { transcripton , error } = await Youtils.getTranscription("<some-youtube-url>", OPENAI_KEY);
-console.log("transcription: ", transcription); 
+//initialize openai client
+Youtils.initOpenAI("<enter-your-api-key>");
+//get a transcript without writing to file
+const { transcripton , error } = await Youtils.getTranscription("<some-youtube-url>");
+
+//get a transcript and write it to a text file
+const { transcripton , error } = await Youtils.getTranscription("<some-youtube-url>",true);
 ```
-* NOTE: Currently will throw an error if the video is longer than the whisper-1 max size, the program will error
-    * Goal to enable automatic audio chunking to prevent errors.
+
 
 
 ## Coming Soon ✨✨
 - download entire playlists as mp4 or mp3
-
-
-
-
-
-
-
