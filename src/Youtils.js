@@ -50,13 +50,14 @@ class Youtils {
   /**
    * @param {string} url the video to transcribe
    * @param {string} apiKey your openai API key to get a whisper completion
-   * @returns {Promise<{transcription?: string, error?:unknown}>}>}
+   * @returns {Promise<{transcript?: string, error?:unknown}>}>}
    */
   static async getTranscription(url, writeToFile = false) {
     if (!Youtils.__openai)
       throw new Error("Must initialize openai before using transcriptions... ");
     const { error, path } = await Youtils.getAudio(url);
-    if (error) return console.error("Failed to transcribe audio: ", error);
+    if (error)
+      return console.error("Failed to transcribe audio: ", error) || { error };
 
     const transcript = await MediaUtils.transcribeAudio(Youtils.__openai, path);
     if (!transcript)

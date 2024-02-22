@@ -31,6 +31,11 @@ const { transcripton , error } = await Youtils.getTranscription("<some-youtube-u
 const { transcripton , error } = await Youtils.getTranscription("<some-youtube-url>",true);
 ```
 
+### CLI
+node Youtils/cli.js [ -v | -a | -t ] [youtube url]
+	-v -> download video
+	-a -> download audio
+	-t -> transcribe video
 
 
 ## Coming Soon ✨✨
