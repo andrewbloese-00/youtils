@@ -64,9 +64,11 @@ To use the CLI with transcriptions, create a `.env` file in the `youtils/` root 
 
 #### CLI Usage
 
+```
 node Youtils/cli.js [ -v | -a | -t | -pa | -pt ] [youtube url]
 -v -> download video
 -a -> download audio
 -t -> transcribe video
 -pa -> download audio from playlist
 -pt -> transcribe a playlist
+```
