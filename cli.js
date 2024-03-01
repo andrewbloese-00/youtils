@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 require("dotenv").config();
 const Youtils = require("./index");
-Youtils.initOpenAI(process.env.OPENAI_SECRET_KEY);
+if (process.env.OPENAI_SECRET_KEY)
+  Youtils.initOpenAI(process.env.OPENAI_SECRET_KEY);
 
 function printUsage() {
   const lines = [
     "Youtils CLI Usage: ",
-    "node Youtils/cli.js [ -v | -a | -t ] [youtube url]",
+    "node Youtils/cli.js [ -v | -a | -t | -pa | -pt ] [youtube url]",
     "\t-v -> download video",
     "\t-a -> download audio",
     "\t-t -> transcribe video",
+    "\t-pa -> download playlist audio",
+    "\t-pt -> transcribe playlist ",
   ];
   console.log(lines.join("\n"));
 }
