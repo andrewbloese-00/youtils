@@ -29,13 +29,8 @@ async function main() {
 
   //validate args
   if (args.length < 2) FATAL_ERR();
-  if (
-    !args[1].startsWith("https://www.youtube.com/watch?") ||
-    !args[1].includes("v=")
-  )
-    FATAL_ERR();
   //determine action
-  switch (args[0]) {
+  switch (args[0].trim()) {
     case "-v": {
       const { error, path } = await Youtils.getVideo(args[1]);
       if (error) ACTION_ERR(error);
@@ -53,6 +48,16 @@ async function main() {
     case "-t": {
       const { error } = await Youtils.getTranscription(args[1], true);
       if (error) ACTION_ERR(error);
+      break;
+    }
+
+    case "-pa": {
+      await Youtils.downloadPlaylistAudio(args[1]);
+      break;
+    }
+
+    case "-pt": {
+      await Youtils.transcribePlaylist(args[1]);
       break;
     }
 

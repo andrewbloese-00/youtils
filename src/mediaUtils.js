@@ -62,6 +62,7 @@ const convertToMp3 = (pathToMp4, removeSrc = false) =>
         if (removeSrc) {
           unlink(pathToMp4, (err) => {
             if (err) console.error(`failed to remove file '${pathToMp4}'`);
+            return resolve({ data: destinationPath, error: undefined });
           });
         }
         return resolve({ data: destinationPath, error: undefined });
@@ -74,14 +75,14 @@ const convertToMp3 = (pathToMp4, removeSrc = false) =>
  * @param {string} url the url of the youtube video to download and convert
  * @returns { Promise<{data?:string,error?:unknown}>} data: 'path/to/<videoId>.mp3'|undefined, error: any errors that occurred | undefined
  */
-async function downloadAndConvertToMp3(url) {
+async function downloadAndConvertToMp3(url, cleanupMp4 = true) {
   const downloadResult = await downloadVideo(url);
   if (downloadResult.error) {
     console.warn("failed to download video, stoping downloadAndConvertToMp3");
     return { error: downloadResult.error, data: undefined };
   }
 
-  const { data, error } = await convertToMp3(downloadResult.data, true);
+  const { data, error } = await convertToMp3(downloadResult.data, cleanupMp4);
   if (error) {
     console.warn("failed to convert video, stoping downloadAndConvertToMp3");
     return { error: error, data: undefined };
@@ -111,7 +112,7 @@ const getFileStream = (pathToFile) => createReadStream(pathToFile);
  * @typedef {{cleanup: "mp3" | "mp4" | "both", chunkSize: number}} VideoTranscriberOptions */
 
 //use small chunks to speed up listening
-const WHISPER_CHUNK_DURATION = 120; // 2 minute chunks
+const WHISPER_CHUNK_DURATION = 60; // 1 minute chunks
 
 /**
  * @about helper: gets the duration of an audio file using promise instead of callback
@@ -188,7 +189,7 @@ async function _transcriptionHelper(openai, pathToMp3, format = "text") {
  * @param {string} pathToMp3 path to the mp3 file to transcribe
  * @param {number} chunkSize the length of each chunk to be generated (in seconds). Default 240 (4 minutes)
  * @note chunkSize ONLY FOR INPUTS > 8minutes. Default is 240 (4 minute chunks)
- * @returns {string|null} The transcript or nothing
+ * @returns {Promise<string|null>} The transcript or nothing
  */
 async function transcribeAudio(
   openai,
