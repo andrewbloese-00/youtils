@@ -257,4 +257,5 @@ module.exports = {
   getFileBuffer,
   getFileStream,
   transcribeAudio,
+  chunkAudio,
 };

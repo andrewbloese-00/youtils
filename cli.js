@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 require("dotenv").config();
 const Youtils = require("./index");
+const { unlink } = require("fs/promises");
+const { WhisperCPPWrapper } = require("./src/localTranscribe");
 if (process.env.OPENAI_SECRET_KEY)
   Youtils.initOpenAI(process.env.OPENAI_SECRET_KEY);
 
 function printUsage() {
   const lines = [
     "Youtils CLI Usage: ",
-    "node Youtils/cli.js [ -v | -a | -t | -pa | -pt ] [youtube url]",
+    "node Youtils/cli.js [ -v | -a | -t | -pa | -pt ] [youtube url] [openai|local]",
     "\t-v -> download video",
     "\t-a -> download audio",
     "\t-t -> transcribe video",
@@ -29,6 +31,8 @@ function ACTION_ERR(msg) {
 
 async function main() {
   const args = process.argv.slice(2);
+  let transcriberMode = "openai";
+  if (args.at(-1).trim() === "local") transcriberMode = "local";
 
   //validate args
   if (args.length < 2) FATAL_ERR();
@@ -49,8 +53,15 @@ async function main() {
     }
 
     case "-t": {
-      const { error } = await Youtils.getTranscription(args[1], true);
-      if (error) ACTION_ERR(error);
+      if (transcriberMode === "openai") {
+        const { error } = await Youtils.getTranscription(args[1], true);
+      } else {
+        const audio = await Youtils.getAudio(args[1], true);
+        if (audio.error) ACTION_ERR(error);
+        await WhisperCPPWrapper.transcribe(audio.path, true);
+        await unlink(audio.path);
+      }
+
       break;
     }
 
