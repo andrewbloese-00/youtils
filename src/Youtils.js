@@ -6,7 +6,7 @@ const { OpenAI } = require("openai");
 const { writeFile, unlink } = require("fs/promises");
 const { getPlaylistInfo } = require("./scraper");
 
-const getUserDownloadsPath = () => join(homedir(), "Downloads");
+const { getUserDownloadsPath, basicID3 } = require("../src/id3Helpers");
 
 async function moveToDownloads(pathToFile) {
   try {
@@ -40,7 +40,7 @@ class Youtils {
    * @param {string} url
    * @returns {Promise<{path?: string, error?:unknown}>}>}
    */
-  static async getAudio(url, cleanup = true) {
+  static async getAudio(url, cleanup = true, id3 = "basic") {
     const { data, error } = await MediaUtils.downloadAndConvertToMp3(
       url,
       cleanup,
@@ -48,6 +48,16 @@ class Youtils {
     if (error) return { path: undefined, error };
     const moveResult = await moveToDownloads(data);
     if (moveResult.error) return { path: undefined, error: moveResult.error };
+    if (id3 === "basic") {
+      console.log("Grabbing 'basic' id3 tags [using youtube video info]");
+      moveResult.path = await basicID3(url, moveResult.path);
+    } else if (id3 === "advanced") {
+      console.warn("'advanced' id3 tags not supported yet...");
+      console.log("Grabbing 'advanced' id3 tags [recognizing song]");
+      // TODO
+      //await advancedID3(moveResult.path)
+    }
+
     return { path: moveResult.path, error: undefined };
   }
 

@@ -42,7 +42,7 @@ async function main() {
     }
 
     case "-a": {
-      const { error, path } = await Youtils.getAudio(args[1]);
+      const { error, path } = await Youtils.getAudio(args[1], true);
       if (error) ACTION_ERR(error);
       console.log("Downloaded audio to: ", path);
       break;
