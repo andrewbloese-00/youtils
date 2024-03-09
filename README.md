@@ -2,6 +2,10 @@
 
 Download videos, playlists and audio from youtube with urls, all in NodeJS. Also , use your OpenAI API Key to enable the Youtils transcriptions API (powered by whisper-1) or [use a local model](#local-model).
 
+## Disclaimer
+
+This project was developed as an educational tool to explore and understand the manipulation of file and media streams. It is intended strictly for educational and personal use only. The creators and contributors of this software do not endorse or promote the use of this tool for downloading copyrighted content without permission. Users are responsible for adhering to applicable laws and regulations in their jurisdiction regarding the use of such software. Please utilize this software responsibly and ethically, and refrain from using it for any unauthorized or malicious purposes.
+
 ## Usage
 
 ### Install and Include
@@ -62,13 +66,14 @@ await Youtils.transcribePlaylist(playlist_url);
 
 To use the CLI with transcriptions, create a `.env` file in the `youtils/` root folder, and create an environment variable `OPENAI_SECRET_KEY` set to your OpenAI access token, or see the section on Local Models for instructions to set up a local transcriber model. Video/Playlist/Audio Downloads are available without openai/transcription integrations!
 
-To specify which transcriber to use specify 'local' or 'openai' and ensure that your `.env` is configured properly. 
+To specify which transcriber to use specify 'local' or 'openai' and ensure that your `.env` is configured properly.
 
-* When using the local transcriber, text is chunked into 10 minute chunks and run sequentially. When using openai, the chunks are run in parallel as 2 minute chunks.
+- When using the local transcriber, text is chunked into 10 minute chunks and run sequentially. When using openai, the chunks are run in parallel as 2 minute chunks.
 
-* Playlist transcriptions are not yet supported for local transcriber!
+- Playlist transcriptions are not yet supported for local transcriber!
 
 #### CLI Usage
+
 ```
 node Youtils/cli.js [ -v | -a | -t | -pa | -pt ] [youtube url] [local|openai]
 -v -> download video
@@ -90,16 +95,15 @@ PATH_TO_MODEL="models/ggml-base.en.bin"
 - PATH_TO_WHISPER_CPP -> the **absolute path** to your local install of `whisper.cpp`
 - PATH_TO_MODEL -> the **relative path** to the model to use, using PATH_TO_WHISPER_CPP as cwd.
 
-
 #### Using the Whisper Wrapper
+
 ```javascript
-  //import the wrapper
-  const {WhisperCPPWrapper} = require("path/to/youtils/src/localTranscribe")
+//import the wrapper
+const { WhisperCPPWrapper } = require("path/to/youtils/src/localTranscribe");
 
-  //get transcript (don't write to file)
-  const text = await WhisperCPPWrapper.transcribe("path/to/file.mp3")
+//get transcript (don't write to file)
+const text = await WhisperCPPWrapper.transcribe("path/to/file.mp3");
 
-  await WhisperCPPWrapper.transcribe("path/to/file.mp3",true)
-  //in this example would write text file to 'path/to/file.txt'
-
+await WhisperCPPWrapper.transcribe("path/to/file.mp3", true);
+//in this example would write text file to 'path/to/file.txt'
 ```
